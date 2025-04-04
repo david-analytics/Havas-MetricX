@@ -11,6 +11,8 @@ Original file is located at
 
 # influencer_engagement_calculator.py
 
+# influencer_engagement_calculator.py
+
 import streamlit as st
 
 # Function to calculate engagement rate
@@ -30,27 +32,50 @@ def calculate_engagement_rate(followers, likes):
 def main():
     # Set page title and header
     st.set_page_config(page_title="Havas MetricX - Engagement Calculator")
+    
+    # Add custom CSS for red background with higher specificity
+    st.markdown("""
+        <style>
+        /* Target the main app container */
+        .stApp {
+            background-color: #FF0000 !important;
+        }
+        /* Target the main content area */
+        [data-testid="stAppViewContainer"] {
+            background-color: #FF0000 !important;
+        }
+        /* Ensure body background is red */
+        body {
+            background-color: #FF0000 !important;
+        }
+        /* Make text readable on red background */
+        .stMarkdown, .stText, h1, h2, h3, p, label {
+            color: white !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+    
     st.title("Welcome to Havas MetricX")
     st.write("Calculate influencer engagement rate based on followers and likes from 10 posts")
 
     # Input for number of followers
-    followers = st.number_input("Enter number of followers",
-                              min_value=1,
-                              value=1000,
+    followers = st.number_input("Enter number of followers", 
+                              min_value=1, 
+                              value=1000, 
                               step=1)
 
     # Input for likes from 10 posts
     st.subheader("Enter likes for 10 posts")
     likes = []
     cols = st.columns(5)  # Create 5 columns for better layout
-
+    
     # Create 10 input fields for likes (2 rows of 5)
     for i in range(10):
         with cols[i % 5]:
-            like = st.number_input(f"Post {i+1}",
-                                 min_value=0,
-                                 value=0,
-                                 step=1,
+            like = st.number_input(f"Post {i+1}", 
+                                 min_value=0, 
+                                 value=0, 
+                                 step=1, 
                                  key=f"like_{i}")
             likes.append(like)
 
@@ -63,7 +88,7 @@ def main():
         else:
             result = calculate_engagement_rate(followers, likes)
             st.success(f"Engagement Rate: {result}%")
-
+            
             # Provide interpretation
             st.write("Engagement Rate Interpretation:")
             if result < 1:
@@ -87,6 +112,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
