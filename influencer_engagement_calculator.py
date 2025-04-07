@@ -61,7 +61,7 @@ def main():
     # Input for number of followers
     followers = st.number_input("Enter number of followers", 
                               min_value=1, 
-                              value=1000, 
+                              value=1000000, 
                               step=1)
 
     # Input for likes from 10 posts
