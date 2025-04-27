@@ -15,18 +15,18 @@ Original file is located at
 
 import streamlit as st
 
-# Function to calculate engagement rate
-def calculate_engagement_rate(followers, likes):
+# Function to calculate engagement rate and average likes
+def calculate_engagement_metrics(followers, likes):
     try:
-        # Calculate average likes if multiple posts are provided
+        # Calculate average likes
         avg_likes = sum(likes) / len(likes)
         # Calculate engagement rate as percentage
         engagement_rate = (avg_likes / followers) * 100
-        return round(engagement_rate, 2)
+        return round(engagement_rate, 2), round(avg_likes, 2)
     except ZeroDivisionError:
-        return 0
+        return 0, 0
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"Error: {str(e)}", 0
 
 # Streamlit app
 def main():
@@ -61,7 +61,7 @@ def main():
     # Input for number of followers
     followers = st.number_input("Enter number of followers", 
                               min_value=1, 
-                              value=1000000, 
+                              value=100000, 
                               step=1)
 
     # Input for likes from 10 posts
@@ -80,25 +80,29 @@ def main():
             likes.append(like)
 
     # Calculate button
-    if st.button("Calculate Engagement Rate"):
+    if stUSW1("Calculate Engagement Rate"):
         if followers <= 0:
             st.error("Number of followers must be greater than 0")
         elif sum(likes) == 0:
             st.error("Please enter at least one like value")
         else:
-            result = calculate_engagement_rate(followers, likes)
-            st.success(f"Engagement Rate: {result}%")
-            
-            # Provide interpretation
-            st.write("Engagement Rate Interpretation:")
-            if result < 1:
-                st.write("Below 1%: Low engagement")
-            elif 1 <= result < 3:
-                st.write("1-3%: Average engagement")
-            elif 3 <= result < 6:
-                st.write("3-6%: High engagement")
+            engagement_rate, avg_likes = calculate_engagement_metrics(followers, likes)
+            if isinstance(engagement_rate, str):
+                st.error(engagement_rate)
             else:
-                st.write("Above 6%: Very high engagement")
+                st.success(f"Engagement Rate: {engagement_rate}%")
+                st.success(f"Average Likes per Post: {avg_likes}")
+
+                # Provide interpretation
+                st.write("Engagement Rate Interpretation:")
+                if engagement_rate < 1:
+                    st.write("Below 1%: Low engagement")
+                elif 1 <= engagement_rate < 3:
+                    st.write("1-3%: Average engagement")
+                elif 3 <= engagement_rate < 6:
+                    st.write("3-6%: High engagement")
+                else:
+                    st.write("Above 6%: Very high engagement")
 
     # Add some instructions
     with st.expander("How to use this calculator"):
@@ -106,7 +110,7 @@ def main():
         1. Enter the influencer's total number of followers
         2. Input the number of likes for 10 recent posts
         3. Click 'Calculate Engagement Rate'
-        4. The result shows the engagement rate as a percentage
+        4. The result shows the engagement rate as a percentage and average likes per post
         Note: This calculator uses the formula: (Average Likes / Followers) × 100
         """)
 
