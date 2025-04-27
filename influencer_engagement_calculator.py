@@ -61,7 +61,7 @@ def main():
     # Input for number of followers
     followers = st.number_input("Enter number of followers", 
                               min_value=1, 
-                              value=100000, 
+                              value=1000, 
                               step=1)
 
     # Input for likes from 10 posts
@@ -80,7 +80,7 @@ def main():
             likes.append(like)
 
     # Calculate button
-    if stUSW1("Calculate Engagement Rate"):
+    if st.button("Calculate Engagement Rate"):
         if followers <= 0:
             st.error("Number of followers must be greater than 0")
         elif sum(likes) == 0:
